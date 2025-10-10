@@ -1,0 +1,36 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== AUTHENTIFICATION ====================
+
+model User {
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  password            String // Hash du mot de passe
+  firstName           String   @map("first_name")
+  lastName            String   @map("last_name")
+  role                UserRole @default(ADMIN)
+  isActive            Boolean  @default(true) @map("is_active")
+  forcePasswordChange Boolean  @default(false) @map("force_password_change")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@map("users")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  CAISSIER
+  VIGILE
+}
