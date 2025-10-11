@@ -1,0 +1,65 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Connexion</h2>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
+      <div class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="votre@email.com"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+            [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          >
+          <p class="mt-1 text-sm text-red-600" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            <span *ngIf="loginForm.get('email')?.errors?.['required']">L'email est requis</span>
+            <span *ngIf="loginForm.get('email')?.errors?.['email']">Format d'email invalide</span>
+          </p>
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="Votre mot de passe"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+            [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          >
+          <p class="mt-1 text-sm text-red-600" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            <span *ngIf="loginForm.get('password')?.errors?.['required']">Le mot de passe est requis</span>
+            <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="loading"
+        >
+          <span *ngIf="loading">Connexion en cours...</span>
+          <span *ngIf="!loading">Se connecter</span>
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center">
+      <p class="text-sm text-gray-600">
+        Pas encore de compte ?
+        <button (click)="goToRegister()" class="font-medium text-orange-600 hover:text-orange-500">S'inscrire</button>
+      </p>
+    </div>
+  </div>
+</div>

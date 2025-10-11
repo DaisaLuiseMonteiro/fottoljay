@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-import { body } from 'express-validator';
+ import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
 
 export class AuthController {
@@ -16,6 +15,26 @@ export class AuthController {
 
       res.status(201).json({
         message: 'Super Admin created successfully',
+        user,
+      });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  static async registerSeller(req: Request, res: Response) {
+    try {
+      const { email, password, firstName, lastName } = req.body;
+
+      const user = await AuthService.registerSeller({
+        email,
+        password,
+        firstName,
+        lastName,
+      });
+
+      res.status(201).json({
+        message: 'Seller created successfully',
         user,
       });
     } catch (error: any) {
@@ -141,33 +160,3 @@ export class AuthController {
     }
   }
 }
-
-export const authValidation = {
-  register: [
-    body('email').isEmail().normalizeEmail(),
-    body('password').isLength({ min: 6 }),
-    body('firstName').trim().isLength({ min: 1 }),
-    body('lastName').trim().isLength({ min: 1 }),
-  ],
-
-  login: [
-    body('email').isEmail().normalizeEmail(),
-    body('password').exists(),
-  ],
-
-  changePassword: [
-    body('currentPassword').optional(),
-    body('newPassword').isLength({ min: 6 }),
-  ],
-
-  initialChangePassword: [
-    body('email').isEmail().normalizeEmail(),
-    body('newPassword').isLength({ min: 6 }),
-  ],
-
-  completeFirstLogin: [
-    body('firstName').trim().isLength({ min: 1 }).withMessage('Le prénom est requis'),
-    body('lastName').trim().isLength({ min: 1 }).withMessage('Le nom est requis'),
-    body('newPassword').isLength({ min: 6 }).withMessage('Le mot de passe doit contenir au moins 6 caractères'),
-  ],
-};

@@ -4,6 +4,26 @@
 
 Le projet back a été nettoyé pour ne conserver que les fonctionnalités d'authentification et d'inscription. Toutes les parties liées aux entreprises, employés, paies, etc. ont été supprimées.
 
+### Modifications récentes (Gestion des produits et vendeurs) :
+- Mise à jour de l'enum `UserRole` : Changement de SUPER_ADMIN/ADMIN/CAISSIER/VIGILE vers ADMIN et SELLER
+- Ajout du modèle `Product` : Lié à un vendeur, avec prix, description
+- Ajout du modèle `Photo` : Lié à un produit, avec URL, type (MAIN/SECONDARY), ordre
+- Seed de l'utilisateur admin avec email `ibou@gmail.com` et mot de passe `passer`
+- Ajout de la méthode `registerSeller` pour l'inscription des vendeurs
+- Mise à jour du schéma Prisma et génération du client
+
+### Modifications supplémentaires :
+- Suppression de `src/server.ts` (fichier serveur principal, non spécifique à l'authentification)
+- Suppression de `src/middlewares/validation.middleware.ts` (middleware de validation générale)
+- Suppression de `tsconfig.json` (configuration TypeScript, non spécifique à l'authentification)
+- Suppression de `package-lock.json` (fichier de verrouillage des dépendances)
+- Correction des routes dans `auth.routes.ts` : suppression des appels à `authValidation` et `handleValidationErrors` pour éviter les erreurs de compilation
+- Modification du UserService frontend pour utiliser les appels HTTP vers l'API backend au lieu de localStorage
+- Création des composants LoginComponent et RegisterComponent avec formulaires et validation
+- Utilisation de Tailwind CSS pour le styling au lieu de SCSS personnalisé
+- Intégration complète frontend-backend pour l'authentification avec gestion des tokens JWT
+- Ajout de documentation détaillée dans le README.md pour l'utilisation frontend
+
 ### Fichiers supprimés :
 - Tous les contrôleurs sauf `auth.controller.ts`
 - Toutes les routes sauf `auth.routes.ts`
@@ -24,14 +44,15 @@ Le projet back a été nettoyé pour ne conserver que les fonctionnalités d'aut
 - `package.json` : Suppression des dépendances non nécessaires, correction du script seed
 
 ### Base de données :
-- Migration appliquée pour ne conserver que la table users
-- Seed exécuté pour créer l'utilisateur super admin
+- Migration appliquée pour ajouter les tables products et photos
+- Schéma mis à jour avec les rôles ADMIN et SELLER
+- Seed exécuté pour créer l'utilisateur admin par défaut (email: ibou@gmail.com, mot de passe: passer)
 
 ## Endpoints disponibles
 
-### Inscription (Registration)
+### Inscription Admin (Registration Admin)
 - **URL** : `POST /api/auth/register`
-- **Description** : Crée un nouvel utilisateur super admin (premier utilisateur seulement)
+- **Description** : Crée un nouvel utilisateur admin (premier utilisateur seulement)
 - **Corps de la requête** :
   ```json
   {
@@ -44,13 +65,40 @@ Le projet back a été nettoyé pour ne conserver que les fonctionnalités d'aut
 - **Réponse de succès** :
   ```json
   {
-    "message": "Super Admin created successfully",
+    "message": "Admin created successfully",
     "user": {
       "id": "uuid",
       "email": "admin@example.com",
       "firstName": "Prénom",
       "lastName": "Nom",
-      "role": "SUPER_ADMIN",
+      "role": "ADMIN",
+      "createdAt": "2025-10-10T01:42:46.329Z"
+    }
+  }
+  ```
+
+### Inscription Vendeur (Registration Seller)
+- **URL** : `POST /api/auth/register-seller`
+- **Description** : Crée un nouvel utilisateur vendeur
+- **Corps de la requête** :
+  ```json
+  {
+    "email": "vendeur@example.com",
+    "password": "motdepasse",
+    "firstName": "Prénom",
+    "lastName": "Nom"
+  }
+  ```
+- **Réponse de succès** :
+  ```json
+  {
+    "message": "Seller created successfully",
+    "user": {
+      "id": "uuid",
+      "email": "vendeur@example.com",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "role": "SELLER",
       "createdAt": "2025-10-10T01:42:46.329Z"
     }
   }
@@ -94,14 +142,11 @@ Le projet back a été nettoyé pour ne conserver que les fonctionnalités d'aut
 back/
 ├── .env
 ├── package.json
-├── package-lock.json
-├── tsconfig.json
 ├── prisma/
 │   ├── schema.prisma
 │   ├── seed.ts
 │   └── migrations/
 ├── src/
-│   ├── server.ts
 │   ├── controllers/
 │   │   └── auth.controller.ts
 │   ├── routes/
@@ -110,8 +155,7 @@ back/
 │   │   └── auth.service.ts
 │   ├── middlewares/
 │   │   ├── auth.middleware.ts
-│   │   ├── rbac.middleware.ts
-│   │   └── validation.middleware.ts
+│   │   └── rbac.middleware.ts
 │   └── utils/
 │       ├── jwt.util.ts
 │       └── password.util.ts
