@@ -1,0 +1,95 @@
+<div class="flex h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <div class="w-64 bg-orange-500 text-white flex flex-col fixed h-full z-10">
+    <div class="p-5 border-b border-orange-400">
+      <h2 class="text-xl font-bold">Fotol Jay</h2>
+    </div>
+    <nav class="flex-1 py-5">
+      <a routerLink="/admin/dashboard" routerLinkActive="bg-orange-600" class="flex items-center px-5 py-3 text-white hover:bg-orange-600 transition-colors">
+        📊 <span class="ml-3">Tableau de bord</span>
+      </a>
+      <a routerLink="/admin/vendeurs" routerLinkActive="bg-orange-600" class="flex items-center px-5 py-3 text-white hover:bg-orange-600 transition-colors">
+        👥 <span class="ml-3">Vendeurs</span>
+      </a>
+      <a routerLink="/admin/produits" routerLinkActive="bg-orange-600" class="flex items-center px-5 py-3 text-white hover:bg-orange-600 transition-colors">
+        📦 <span class="ml-3">Produits</span>
+      </a>
+      <a routerLink="/admin/notifications" routerLinkActive="bg-orange-600" class="flex items-center px-5 py-3 text-white hover:bg-orange-600 transition-colors">
+        🔔 <span class="ml-3">Notifications</span>
+      </a>
+    </nav>
+    <div class="py-5 border-t border-orange-400">
+      <a routerLink="/admin/parametres" routerLinkActive="bg-orange-600" class="flex items-center px-5 py-3 text-white hover:bg-orange-600 transition-colors">
+        ⚙️ <span class="ml-3">Paramètres</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 ml-64 flex flex-col">
+    <!-- Navbar -->
+    <header class="bg-orange-500 text-white px-8 py-4 flex justify-between items-center shadow-md">
+      <h1 class="text-2xl font-bold">Produits</h1>
+      <div class="flex items-center space-x-4">
+        <div class="text-right">
+          <div class="font-bold">Ibou Admin (Admin)</div>
+        </div>
+        <button class="p-2 hover:bg-orange-600 rounded-full transition-colors">
+          🔔
+        </button>
+        <button class="px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors">
+          🚪 Déconnexion
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="flex-1 p-8 overflow-y-auto">
+      <h2 class="text-2xl font-bold mb-6">Liste des produits</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+          <img src="https://via.placeholder.com/300x200?text=Produit+1" alt="Produit 1" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Smartphone Samsung</h3>
+            <p class="text-gray-600 mb-2">Téléphone dernier cri avec appareil photo haute résolution</p>
+            <div class="flex justify-between items-center">
+              <span class="text-xl font-bold text-orange-500">599 €</span>
+              <div class="space-x-2">
+                <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Modifier</button>
+                <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+          <img src="https://via.placeholder.com/300x200?text=Produit+2" alt="Produit 2" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Ordinateur Portable Dell</h3>
+            <p class="text-gray-600 mb-2">Ordinateur performant pour le travail et les loisirs</p>
+            <div class="flex justify-between items-center">
+              <span class="text-xl font-bold text-orange-500">899 €</span>
+              <div class="space-x-2">
+                <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Modifier</button>
+                <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+          <img src="https://via.placeholder.com/300x200?text=Produit+3" alt="Produit 3" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Casque Audio Sony</h3>
+            <p class="text-gray-600 mb-2">Casque sans fil avec réduction de bruit active</p>
+            <div class="flex justify-between items-center">
+              <span class="text-xl font-bold text-orange-500">199 €</span>
+              <div class="space-x-2">
+                <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Modifier</button>
+                <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

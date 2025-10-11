@@ -17,6 +17,8 @@ model User {
   password            String // Hash du mot de passe
   firstName           String   @map("first_name")
   lastName            String   @map("last_name")
+  phone               String?  @map("phone")
+  whatsappLink        String?  @map("whatsapp_link")
   role                UserRole @default(ADMIN)
   isActive            Boolean  @default(true) @map("is_active")
   forcePasswordChange Boolean  @default(false) @map("force_password_change")
@@ -24,13 +26,44 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  products Product[]
+
   @@index([email])
   @@map("users")
 }
 
+model Product {
+  id          String   @id @default(uuid())
+  sellerId    String   @map("seller_id")
+  seller      User     @relation(fields: [sellerId], references: [id])
+  price       Float
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  photos Photo[]
+
+  @@map("products")
+}
+
+model Photo {
+  id        String    @id @default(uuid())
+  productId String    @map("product_id")
+  product   Product   @relation(fields: [productId], references: [id])
+  url       String
+  type      PhotoType
+  order     Int
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@map("photos")
+}
+
 enum UserRole {
-  SUPER_ADMIN
   ADMIN
-  CAISSIER
-  VIGILE
+  SELLER
+}
+
+enum PhotoType {
+  MAIN
+  SECONDARY
 }

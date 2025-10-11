@@ -1,49 +1,26 @@
 import { Router } from 'express';
-import { AuthController, authValidation } from '../controllers/auth.controller';
-import { handleValidationErrors } from '../middlewares/validation.middleware';
+import { AuthController } from '../controllers/auth.controller';
+import { ProductController } from '../controllers/product.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.post(
-  '/register',
-  authValidation.register,
-  handleValidationErrors,
-  AuthController.register
-);
+router.post('/register', AuthController.register);
 
-router.post(
-  '/login',
-  authValidation.login,
-  handleValidationErrors,
-  AuthController.login
-);
+router.post('/register-seller', AuthController.registerSeller);
+
+router.post('/login', AuthController.login);
 
 router.post('/logout', authenticate, AuthController.logout);
 
 router.get('/me', authenticate, AuthController.getCurrentUser);
 
-router.put(
-  '/change-password',
-  authenticate,
-  authValidation.changePassword,
-  handleValidationErrors,
-  AuthController.changePassword
-);
+router.put('/change-password', authenticate, AuthController.changePassword);
 
-router.put(
-  '/initial-change-password',
-  authValidation.changePassword,
-  handleValidationErrors,
-  AuthController.initialChangePassword
-);
+router.put('/initial-change-password', AuthController.initialChangePassword);
 
-router.post(
-  '/complete-first-login',
-  authenticate,
-  authValidation.completeFirstLogin,
-  handleValidationErrors,
-  AuthController.completeFirstLogin
-);
+router.post('/complete-first-login', authenticate, AuthController.completeFirstLogin);
+
+router.get('/products', ProductController.getProducts);
 
 export default router;

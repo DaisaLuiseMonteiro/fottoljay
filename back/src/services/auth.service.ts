@@ -27,7 +27,47 @@ export class AuthService {
         password: hashedPassword,
         firstName: data.firstName,
         lastName: data.lastName,
-        role: UserRole.SUPER_ADMIN,
+        role: UserRole.ADMIN,
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+
+    return user;
+  }
+
+  /**
+   * Register a seller user
+   */
+  static async registerSeller(data: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }) {
+    const existingUser = await prisma.user.findUnique({
+      where: { email: data.email },
+    });
+
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 12);
+
+    const user = await prisma.user.create({
+      data: {
+        email: data.email,
+        password: hashedPassword,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        role: UserRole.SELLER,
       },
       select: {
         id: true,
