@@ -31,14 +31,15 @@
     <header class="bg-orange-500 text-white px-8 py-4 flex justify-between items-center shadow-md">
       <h1 class="text-2xl font-bold">Tableau de bord</h1>
       <div class="flex items-center space-x-4">
-        <div class="text-right">
-          <div class="font-bold">Ibou Admin (Admin)</div>
+        <div class="text-right" *ngIf="currentUser">
+          <div class="font-bold">{{ currentUser.firstName }} {{ currentUser.lastName }} ({{ currentUser.role }})</div>
         </div>
         <button class="p-2 hover:bg-orange-600 rounded-full transition-colors">
           🔔
         </button>
-        <button class="px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors">
-          🚪 Déconnexion
+        <button (click)="logout()" class="px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors flex items-center space-x-2">
+          <span>🚪</span>
+          <span>Déconnexion</span>
         </button>
       </div>
     </header>

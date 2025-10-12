@@ -2,13 +2,22 @@
   <!-- Header -->
   <header class="bg-white shadow-md px-8 py-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-orange-500">Fotol Jay</h1>
-    <div class="flex space-x-4">
-      <button routerLink="/login" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors">
-        Se connecter
-      </button>
-      <button routerLink="/register" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
-        Vendre sur Fotol Jay
-      </button>
+    <div class="flex space-x-4 items-center">
+      <div *ngIf="isLoggedIn && currentUser" class="flex items-center space-x-4">
+        <span class="text-gray-700">Bienvenue, {{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+        <button (click)="logout()" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors flex items-center space-x-2">
+          <span>🚪</span>
+          <span>Déconnexion</span>
+        </button>
+      </div>
+      <div *ngIf="!isLoggedIn" class="flex space-x-4">
+        <button routerLink="/login" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors">
+          Se connecter
+        </button>
+        <button routerLink="/register" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">
+          vendre
+        </button>
+      </div>
     </div>
   </header>
 
@@ -53,12 +62,12 @@
       <h2 class="text-2xl font-bold mb-6 text-center">Produits disponibles</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" *ngFor="let product of products">
-          <img [src]="product.mainPhoto" [alt]="product.name" class="w-full h-48 object-cover">
+          <img [src]="product.mainPhoto" [alt]="product.name" class="w-full h-48 object-cover" (error)="onImageError($event)">
           <div class="p-4">
             <h3 class="text-lg font-semibold mb-2">{{ product.name }}</h3>
             <p class="text-gray-600 mb-2">{{ product.description }}</p>
             <div class="flex justify-between items-center mb-3">
-              <span class="text-xl font-bold text-orange-500">{{ product.price }} €</span>
+              <span class="text-xl font-bold text-orange-500">{{ product.price | number:'':'fr-FR' }} FCFA</span>
               <div class="flex space-x-2">
                 <button *ngIf="product.seller.phone" (click)="callSeller(product.seller.phone!)" class="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors" title="Appeler">
                   📞
