@@ -5,14 +5,14 @@
       <h1 class="text-2xl font-bold text-orange-500">Fotol Jay</h1>
     </div>
     <div class="flex items-center space-x-6">
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center space-x-2" *ngIf="currentUser">
         <span class="text-gray-600">👤</span>
-        <span class="font-medium">Vendeur Connecté</span>
+        <span class="font-medium">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
       </div>
       <button class="p-2 text-gray-600 hover:text-orange-500 transition-colors">
         ⚙️
       </button>
-      <button class="p-2 text-gray-600 hover:text-red-500 transition-colors">
+      <button (click)="logout()" class="p-2 text-gray-600 hover:text-red-500 transition-colors">
         🚪
       </button>
     </div>

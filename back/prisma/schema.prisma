@@ -19,7 +19,7 @@ model User {
   lastName            String   @map("last_name")
   phone               String?  @map("phone")
   whatsappLink        String?  @map("whatsapp_link")
-  role                UserRole @default(ADMIN)
+  role                UserRole @default(SELLER)
   isActive            Boolean  @default(true) @map("is_active")
   forcePasswordChange Boolean  @default(false) @map("force_password_change")
 

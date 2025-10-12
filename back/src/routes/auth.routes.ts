@@ -2,12 +2,13 @@ import { Router } from 'express';
 import { AuthController } from '../controllers/auth.controller';
 import { ProductController } from '../controllers/product.controller';
 import { authenticate } from '../middlewares/auth.middleware';
+import { validateUserRegistration, validateProductCreation, handleValidationErrors } from '../middlewares/validation.middleware';
 
 const router = Router();
 
-router.post('/register', AuthController.register);
+router.post('/register', validateUserRegistration, handleValidationErrors, AuthController.register);
 
-router.post('/register-seller', AuthController.registerSeller);
+router.post('/register-seller', validateUserRegistration, handleValidationErrors, AuthController.registerSeller);
 
 router.post('/login', AuthController.login);
 
@@ -22,5 +23,9 @@ router.put('/initial-change-password', AuthController.initialChangePassword);
 router.post('/complete-first-login', authenticate, AuthController.completeFirstLogin);
 
 router.get('/products', ProductController.getProducts);
+
+router.post('/products', authenticate, ProductController.uploadPhotos, validateProductCreation, handleValidationErrors, ProductController.createProduct);
+
+router.get('/uploads/:filename', ProductController.getImage);
 
 export default router;
