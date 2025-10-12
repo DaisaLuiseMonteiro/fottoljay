@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import * as path from 'path';
 import { PrismaClient } from '@prisma/client';
 import authRoutes from './routes/auth.routes';
 
@@ -13,8 +14,38 @@ const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
+  credentials: true
+}));
 app.use(express.json());
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
+  setHeaders: (res, path) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Cache-Control', 'public, max-age=31536000');
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.set('Cross-Origin-Embedder-Policy', 'credentialless');
+  }
+}));
+
+// Also serve images from front assets
+app.use('/assets/images', express.static(path.join(__dirname, '../../front/src/assets/images /'), {
+  setHeaders: (res, path) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Cache-Control', 'public, max-age=31536000');
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.set('Cross-Origin-Embedder-Policy', 'credentialless');
+    res.set('Content-Security-Policy', "default-src 'self'");
+  }
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);
