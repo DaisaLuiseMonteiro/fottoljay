@@ -64,20 +64,20 @@ const sellers: Seller[] = [
 ];
 
 const products: Product[] = [
-  { name: 'appartement meuble', price: 15000000, description: 'Appartement moderne meublé, prêt à emménager' },
-  { name: 'apple watch', price: 4500000, description: 'Apple Watch neuve, état impeccable' },
-  { name: 'canard', price: 250000, description: 'Canard fermier frais, élevé naturellement' },
-  { name: 'gans', price: 350000, description: 'Gans de qualité supérieure, très tendre' },
-  { name: 'huile de tournessol', price: 150000, description: 'Huile de tournesol bio, 5 litres' },
-  { name: 'meuble', price: 3000000, description: 'Meuble design moderne pour salon' },
-  { name: 'moto de course', price: 25000000, description: 'Moto de course puissante et rapide' },
-  { name: 'play 5', price: 5500000, description: 'PlayStation 5 neuve avec accessoires' },
-  { name: 'poulet de chair', price: 200000, description: 'Poulet fermier frais et savoureux' },
-  { name: 'pull homme', price: 350000, description: 'Pull homme élégant en laine douce' },
-  { name: 'tablette d\'oeuf', price: 50000, description: 'Tablette d\'œufs frais du jour' }
+  { name: 'Appartement meublé', price: 15000000, description: 'Appartement moderne meublé, prêt à emménager' },
+  { name: 'Apple Watch', price: 4500000, description: 'Apple Watch neuve, état impeccable' },
+  { name: 'Canard', price: 250000, description: 'Canard fermier frais, élevé naturellement' },
+  { name: 'Gans', price: 350000, description: 'Gans de qualité supérieure, très tendre' },
+  { name: 'Huile de tournesol', price: 150000, description: 'Huile de tournesol bio, 5 litres' },
+  { name: 'Meuble', price: 3000000, description: 'Meuble design moderne pour salon' },
+  { name: 'Moto de course', price: 25000000, description: 'Moto de course puissante et rapide' },
+  { name: 'Play 5', price: 5500000, description: 'PlayStation 5 neuve avec accessoires' },
+  { name: 'Poulet de chair', price: 200000, description: 'Poulet fermier frais et savoureux' },
+  { name: 'Pull homme', price: 350000, description: 'Pull homme élégant en laine douce' },
+  { name: 'Tablette d\'oeuf', price: 50000, description: 'Tablette d\'œufs frais du jour' }
 ];
 
-async function main(): Promise<void> {
+async function main() {
   try {
     const hashedPassword = bcrypt.hashSync('passer', 12);
 
@@ -109,10 +109,12 @@ async function main(): Promise<void> {
             lastName: seller.lastName,
             phone: seller.phone,
             whatsappLink: seller.whatsappLink,
+            city: seller.city,
             role: UserRole.SELLER,
           } as any,
         });
         createdSellers.push(createdSeller);
+        console.log(`Seller ${seller.email} created successfully`);
       } catch (error) {
         console.log(`Seller ${seller.email} already exists, skipping...`);
         // Find existing seller
@@ -135,30 +137,49 @@ async function main(): Promise<void> {
       const createdProduct = await prisma.product.create({
         data: {
           sellerId: seller.id,
+          name: product.name,
           price: product.price,
           description: product.description,
+          category: 'AUTRE', // Default category for existing products
         },
       });
 
-      // Create photo for the product
-      const imageName = product.name + '.jpeg';
-      const imagePath = path.join(__dirname, '../uploads', imageName);
+      // Create photo for the product - map product names to exact filenames
+      const imageMap: { [key: string]: string } = {
+        'Appartement meublé': 'appartement meuble .jpeg',
+        'Apple Watch': 'apple watch.jpeg',
+        'Canard': 'canard.jpeg',
+        'Gans': 'gans.jpeg',
+        'Huile de tournesol': 'huile de tournessol.jpeg',
+        'Meuble': 'meuble.jpeg',
+        'Moto de course': 'moto de course.jpeg',
+        'Play 5': 'play 5.jpeg',
+        'Poulet de chair': 'poulet de chair.jpeg',
+        'Pull homme': 'pull homme .jpeg',
+        'Tablette d\'oeuf': 'tablette d\'oeuf.jpeg'
+      };
 
-      console.log(`Checking image: ${imageName} at ${imagePath}`);
-      console.log(`File exists: ${fs.existsSync(imagePath)}`);
+      const imageName = imageMap[product.name];
+      if (imageName) {
+        const imagePath = path.join(__dirname, '../uploads', imageName);
+        console.log(`Checking image: ${imageName} at ${imagePath}`);
+        console.log(`File exists: ${fs.existsSync(imagePath)}`);
 
-      if (fs.existsSync(imagePath)) {
-        await prisma.photo.create({
-          data: {
-            productId: createdProduct.id,
-            url: `/uploads/${imageName}`,
-            type: PhotoType.MAIN,
-            order: 1,
-          } as any,
-        });
-        console.log(`Photo created for product: ${product.name}`);
+        if (fs.existsSync(imagePath)) {
+          await prisma.photo.create({
+            data: {
+              productId: createdProduct.id,
+              url: `/uploads/${imageName}`,
+              type: PhotoType.MAIN,
+              order: 1,
+            } as any,
+          });
+          console.log(`Photo created for product: ${product.name} with file: ${imageName}`);
+        } else {
+          console.log(`Image file not found for product: ${product.name}`);
+        }
       } else {
-        console.log(`Image not found for product: ${product.name}`);
+        console.log(`No image mapping found for product: ${product.name}`);
       }
     }
 

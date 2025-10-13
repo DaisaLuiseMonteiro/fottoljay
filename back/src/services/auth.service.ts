@@ -50,6 +50,10 @@ export class AuthService {
     password: string;
     firstName: string;
     lastName: string;
+    phone?: string;
+    whatsappLink?: string;
+    city?: string;
+    profilePhoto?: string;
   }) {
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
@@ -67,6 +71,10 @@ export class AuthService {
         password: hashedPassword,
         firstName: data.firstName,
         lastName: data.lastName,
+        phone: data.phone,
+        whatsappLink: data.whatsappLink,
+        city: data.city,
+        profilePhoto: data.profilePhoto,
         role: UserRole.SELLER,
       },
       select: {
@@ -74,6 +82,10 @@ export class AuthService {
         email: true,
         firstName: true,
         lastName: true,
+        phone: true,
+        whatsappLink: true,
+        city: true,
+        profilePhoto: true,
         role: true,
         createdAt: true,
       },
