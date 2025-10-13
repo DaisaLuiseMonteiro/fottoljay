@@ -26,6 +26,12 @@ router.get('/products', ProductController.getProducts);
 
 router.post('/products', authenticate, ProductController.uploadPhotos, validateProductCreation, handleValidationErrors, ProductController.createProduct);
 
+router.get('/products/pending', authenticate, ProductController.getPendingProducts);
+
+router.put('/products/status', authenticate, ProductController.updateProductStatus);
+
+router.get('/products/seller', authenticate, ProductController.getProductsBySeller);
+
 router.get('/uploads/:filename', ProductController.getImage);
 
 export default router;

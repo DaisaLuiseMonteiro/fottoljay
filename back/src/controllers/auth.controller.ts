@@ -24,13 +24,17 @@ export class AuthController {
 
   static async registerSeller(req: Request, res: Response) {
     try {
-      const { email, password, firstName, lastName } = req.body;
+      const { email, password, firstName, lastName, phone, whatsappLink, city, profilePhoto } = req.body;
 
       const user = await AuthService.registerSeller({
         email,
         password,
         firstName,
         lastName,
+        phone,
+        whatsappLink,
+        city,
+        profilePhoto,
       });
 
       res.status(201).json({
